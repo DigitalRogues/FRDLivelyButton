@@ -69,7 +69,7 @@ func targetFunc()
 Button appearance and behavior can be somewhat customized using the FRDLivelyButtonObject.swift file. Color, highlighted color, line thickness, animation
 durations, etc... can be customized. Default should work just fine though.
 
-This area needs more work in swift, I quickly got it to work for my needs.
+This area needs more work in swift, I have yet to polish it up.
 
 See FRDLivelyButtonObject.swift for list of possible attributes.
 
