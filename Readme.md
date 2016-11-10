@@ -1,7 +1,7 @@
-# FRDLivelyButton
+# FRDLivelyButton-Swift
 
-`FRDLivelyButton` is a simple UIButton subclass intended to be used inside a UIBarButtonItem,
-even though it can be used anywhere you can use a UIButton. 
+`FRDLivelyButton-Swift` is a dirty and quick port of the original simple UIButton subclass intended to be used inside a UIBarButtonItem,
+even though it can be used anywhere you can use a UIButton.
 It is entirely Core Graphics driven, supports 5 common button types (menu, close, add, etc...)
 used in navigation bar, and will nicely animate any button type changes and touch events.
 
@@ -9,65 +9,82 @@ used in navigation bar, and will nicely animate any button type changes and touc
 
 ## Requirements
 
-`FRDLivelyButton` uses ARC and requires iOS 6.1+.
+`FRDLivelyButton-Swift` uses Swift 3
 
 
 ## Installation
 
 ### CocoaPods
+cocoapods has not yet been updated for the swift version
 
-`pod 'FRDLivelyButton', '~> 1.1.3'`
+~~`pod 'FRDLivelyButton', '~> 1.1.3'`~~
 
 ### Manual
 
-Copy the folder `FRDLivelyButton` to your project.
+Copy the files `FRDLivelyButton-Swift.swift` & `FRDLivelyButtonObject.swift` to your project.
 
 ## Usage
 
-Add a FRDLivelyButton either in code or using interface builder.
+Add a FRDLivelyButton either in code. (may work in Storyboards but I have yet to try it that way)
 
 Example, how to add a ```FRDLivelyButton``` in a nav bar:
 
-``` objc
-FRDLivelyButton *button = [[FRDLivelyButton alloc] initWithFrame:CGRectMake(0,0,36,28)];
-[button setStyle:kFRDLivelyButtonStyleHamburger animated:NO];
-[button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
-self.navigationItem.rightBarButtonItem = buttonItem;
+``` swift
+class view: UIViewController {
+let button = FRDLivelyButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+
+  func buttonConfig() {
+    button.setStyle(style: kFRDLivelyButtonStyle.kFRDLivelyButtonStyleCaretUp, animated: true)
+
+    button.addTarget(self, action: #selector(targetFunc), for: .touchUpInside)
+
+    let buttonItem = UIBarButtonItem(customView: button)
+    navigationItem.rightBarButtonItem = buttonItem
+  }
+}
 ```
 
-To change the button style, just call ```setStyle:animated```:
+To change the button style, just call ```setStyle(style:,animated:)```:
 
-``` objc
-[self.myButton setStyle:kFRDLivelyButtonStyleCircleClose animated:YES];
+``` swift
+button.setStyle(style: kFRDLivelyButtonStyle.kFRDLivelyButtonStyleCaretDown, animated: true)
 ```
 
 The current type of the button can be accessed using the buttonStyle property:
 
-``` objc
-- (IBAction)buttonAction:(FRDLivelyButton *)sender
+``` swift
+func targetFunc()
 {
-    if (sender.buttonStyle == kFRDLivelyButtonStylePlus) {
+    if (button.buttonStyle == kFRDLivelyButtonStyleCaretUp) {
     	// logic
-    } else ....
+      button.setStyle(style: kFRDLivelyButtonStyle.kFRDLivelyButtonStyleCaretDown, animated: true)
+    } else
+    button.setStyle(style: kFRDLivelyButtonStyle.kFRDLivelyButtonStyleCaretUp, animated: true)
 }
 ```
 
 
 ## Customizing Appearance
 
-Button appearance and behavior can be customized using an options NSDictionary. Color, highlighted color, line thickness, animation 
+Button appearance and behavior can be somewhat customized using the FRDLivelyButtonObject.swift file. Color, highlighted color, line thickness, animation
 durations, etc... can be customized. Default should work just fine though.
 
-See FRDLivelyButton.h for list of possible attributes.
+This area needs more work in swift, I quickly got it to work for my needs.
+
+See FRDLivelyButtonObject.swift for list of possible attributes.
 
 Example:
 
-``` objc
-[button setOptions:@{ kFRDLivelyButtonLineWidth: @(2.0f),
-                      kFRDLivelyButtonHighlightedColor: [UIColor colorWithRed:0.5 green:0.8 blue:1.0 alpha:1.0],
-                      kFRDLivelyButtonColor: [UIColor blueColor]
-                      }];
+``` swift
+class FRDLivelyButtonObject: NSObject {
+    var kFRDLivelyButtonHighlightScale: CGFloat = 0.9
+    var kFRDLivelyButtonLineWidth: CGFloat = 2.0
+    var kFRDLivelyButtonColor: CGColor = UIColor.white.cgColor
+    var kFRDLivelyButtonHighlightedColor: CGColor = UIColor.lightGray.cgColor
+    var kFRDLivelyButtonHighlightAnimationDuration: Double = 0.1
+    var kFRDLivelyButtonUnHighlightAnimationDuration: Double = 0.15
+    var kFRDLivelyButtonStyleChangeAnimationDuration:Double = 0.3
+}
 ```
 
 
@@ -75,7 +92,7 @@ Example:
 
     The MIT License (MIT)
 
-    Copyright (c) 2014 Sebastien Windal
+    Copyright (c) 2016 Brandon Harris
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -94,5 +111,3 @@ Example:
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
-
-
